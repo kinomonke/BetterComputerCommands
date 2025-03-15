@@ -5,8 +5,8 @@
     /// </summary>
     internal class PluginInfo
     {
-        public const string GUID = "com.kino.gorillatag.customgamemode";
-        public const string Name = "CustomGamemode";
+        public const string GUID = "com.kino.gorillatag.bettercomputercommands";
+        public const string Name = "BetterComputerCommands ";
         public const string Version = "1.0.0";
     }
 }
