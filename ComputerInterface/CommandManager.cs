@@ -61,7 +61,7 @@ namespace ComputerModExample
                 }
                 else
                 {
-                    return "not in a room!";
+                    return "Commands made by kino \nping command inspired by lunakittyyys easyping mod - github.com/lunakittyyy/EasyPing";
                 }
             }));
             void RegisterCommand(Command cmd)
