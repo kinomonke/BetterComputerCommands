@@ -167,18 +167,5 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
                 UnregisterAllCommands();
             }
         }
-        /*pblic static void CreatePlayerAndUpdateDisplayName(string playFabId, Action<GetAccountInfoResult> result, Action<PlayFabError> error)
-        {
-            PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest()
-            {
-                PlayFabId = playFabId,
-            },
-            result,
-            error);
-        }
-        public static void test()
-        {
-            PhotonNetwork.GameVersion.ToString();
-        }*/
     }
 }
