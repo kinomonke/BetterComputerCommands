@@ -3,15 +3,17 @@ using ComputerInterface;
 using Zenject;
 using Photon.Pun;
 using UnityEngine;
+using System;
 
-namespace ComputerModExample
+namespace ComputerModExample //i wont explain what this stuff does i'm really bad at it theres decent documentation on how to use/create commands at: https://github.com/DecalFree/GorillaInterface
 {
-    internal class PingCommand : IInitializable
+    internal class CustomCommands : IInitializable
     {
         private readonly CommandHandler _commandHandler;
+        private readonly string playFabId;
         private List<CommandToken> _commandTokens;
 
-        public PingCommand(CommandHandler commandHandler)
+        public CustomCommands(CommandHandler commandHandler)
         {
             _commandHandler = commandHandler;
         }
@@ -31,7 +33,7 @@ namespace ComputerModExample
                     return "Not in a room!";
                 }
             }));
-            RegisterCommand(new Command(name: "fps", argumentTypes: null, args =>
+            RegisterCommand(new Command(name: "fps", argumentTypes: null, args => //frames per second
             {
                 if (PhotonNetwork.InRoom == true)
                 {
@@ -57,13 +59,95 @@ namespace ComputerModExample
             {
                 if (PhotonNetwork.InRoom == true)
                 {
-                    return "Commands made by kino \nping command inspired by lunakittyyys easyping mod - github.com/lunakittyyy/EasyPing\n";
+                    return "Commands made by kino \nping command inspired by lunakittyyys easyping mod | github.com/lunakittyyy/EasyPing";
                 }
                 else
                 {
-                    return "Commands made by kino \nping command inspired by lunakittyyys easyping mod - github.com/lunakittyyy/EasyPing";
+                    return "Commands made by kino \nping command inspired by lunakittyyys easyping mod | github.com/lunakittyyy/EasyPing";
                 }
             }));
+
+            RegisterCommand(new Command(name: "time", argumentTypes: null, args =>
+            {
+                if (!PhotonNetwork.InRoom == true)
+                {
+                    return "Your local date and time is" + DateTime.UtcNow.ToString();
+                }
+                else
+                {
+                    return "Your local date and time is" + DateTime.UtcNow.ToString();
+                }
+            }));
+
+            RegisterCommand(new Command(name: "appversion", argumentTypes: null, args =>
+            {
+                if (!PhotonNetwork.InRoom == true)
+                {
+                    return "Current app version is:" + PhotonNetwork.AppVersion.ToString();
+                }
+                else
+                {
+                    return "Current app version is:" + PhotonNetwork.AppVersion.ToString();
+                }
+            }));
+
+            RegisterCommand(new Command(name: "master", argumentTypes: null, args =>
+            {
+                if (!PhotonNetwork.InRoom == true)
+                {
+                    return PhotonNetwork.IsMasterClient.ToString();
+                }
+                else
+                {
+                    return "Not in a room!"; //gotta be in a room lil bro, lock in!!!
+                }
+            }));
+
+            RegisterCommand(new Command(name: "players", argumentTypes: null, args =>
+            {
+                if (!PhotonNetwork.InRoom == true)
+                {
+                    return "There are" + PhotonNetwork.CountOfPlayers.ToString() + "online.";
+                }
+                else
+                {
+                    return PhotonNetwork.CountOfPlayers.ToString();
+                }
+            }));
+            RegisterCommand(new Command(name: "help", argumentTypes: null, args =>
+            {
+                if (PhotonNetwork.InRoom == true)
+                {
+                    return "Command List: (see 'help2' for more commands)\nfps\nplayerid\nping\ntime\nplayers"; //1, 2, 3, 4, 5
+                }
+                else
+                {
+                    return "Command List: (see 'help2' for more commands)\nfps\nplayerid\nping\ntime\nplayers";
+                }
+            }));
+
+            RegisterCommand(new Command(name: "help2", argumentTypes: null, args =>
+            {
+                if (PhotonNetwork.InRoom == true)
+                {
+                    return "Command List:\nplayers\nmaster\nappversion\ntime\ncredit"; // 1, 2, 3, 4, 5
+                }
+                else
+                {
+                    return "Command List:\nplayers\nmaster\nappversion\ntime\ncredit";
+                }
+            })); // for help commands, 5 per help.
+            RegisterCommand(new Command(name: "creation", argumentTypes: null, args =>
+            {
+                if (PhotonNetwork.InRoom == true)
+                {
+                    return "still figuring this one out, sorry!";
+                }
+                else // sorry king defaultuser0 (efaultuber0) 
+                {
+                    return "still figuring this one out, sorry!";
+                }
+            })); // when i get this it will go in help3 :)
             void RegisterCommand(Command cmd)
             {
                 var token = _commandHandler.AddCommand(cmd);
@@ -78,10 +162,23 @@ namespace ComputerModExample
                 }
             }
 
-            void Dispose()
+        void UnregCommands()
             {
                 UnregisterAllCommands();
             }
         }
+        /*pblic static void CreatePlayerAndUpdateDisplayName(string playFabId, Action<GetAccountInfoResult> result, Action<PlayFabError> error)
+        {
+            PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest()
+            {
+                PlayFabId = playFabId,
+            },
+            result,
+            error);
+        }
+        public static void test()
+        {
+            PhotonNetwork.GameVersion.ToString();
+        }*/
     }
 }
