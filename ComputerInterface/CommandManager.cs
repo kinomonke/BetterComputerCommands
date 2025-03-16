@@ -28,7 +28,7 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
             {
                 if (NetworkSystem.Instance.InRoom) //inspired by lunakittyyys easyping mod (https://github.com/lunakittyyy/EasyPing)
                 {
-                    return "Ping is: " + PhotonNetwork.GetPing() + "ms \n Your region: " + PhotonNetwork.CloudRegion.Replace("/*", "").ToUpper();
+                    return $"Ping is: {PhotonNetwork.GetPing()}ms \nYour region: {PhotonNetwork.CloudRegion.Replace("/*", "").ToUpper()}";
                 }
                 else
                 {
@@ -38,12 +38,12 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
 
             RegisterCommand(new Command(name: "fps", argumentTypes: null, args => //frames per second
             {
-                return "FPS (for this frame) is: " + (1f / Time.deltaTime).ToString();
+                return "FPS (for this frame) is: " + (1f / Time.deltaTime);
             }));
 
             RegisterCommand(new Command(name: "playerid", argumentTypes: null, args =>
             {
-                return "Your player ID is: " + (PhotonNetwork.LocalPlayer.UserId).ToString();
+                return "Your player ID is: " + NetworkSystem.Instance.LocalPlayer.UserId;
             }));
 
             RegisterCommand(new Command(name: "credit", argumentTypes: null, args =>
@@ -53,19 +53,22 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
 
             RegisterCommand(new Command(name: "time", argumentTypes: null, args =>
             {
-                return "Your local date and time is: " + DateTime.UtcNow.ToString();
+                return "Your local date and time is: " + DateTime.UtcNow;
             }));
 
             RegisterCommand(new Command(name: "appversion", argumentTypes: null, args =>
             {
-                return "Current app version is: " + PhotonNetwork.AppVersion.ToString();
+                return "Current app version is: " + GorillaComputer.instance.version;
             }));
 
             RegisterCommand(new Command(name: "master", argumentTypes: null, args =>
             {
-                if (!NetworkSystem.Instance.InRoom)
+                if (NetworkSystem.Instance.InRoom)
                 {
-                    return PhotonNetwork.IsMasterClient.ToString();
+                    if (NetworkSystem.Instance.IsMasterClient)
+                        return "You're master!";
+                    else
+                        return "You aren't master!";
                 }
                 else
                 {
@@ -75,7 +78,7 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
 
             RegisterCommand(new Command(name: "players", argumentTypes: null, args =>
             {
-                return "There are" + PhotonNetwork.CountOfPlayers.ToString() + "online.";
+                return "There are " + NetworkSystem.Instance.GlobalPlayerCount() + " globally online.";
             }));
 
             RegisterCommand(new Command(name: "help", argumentTypes: null, args =>
@@ -111,9 +114,9 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
                 if (NetworkSystem.Instance.InRoom)
                 {
                     PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(rngsstring(), JoinType.Solo); // joining that random string that we created
-                    return "Leaving room and joining random room";
+                    return $"Leaving {NetworkSystem.Instance.CurrentRoom} and joining random room";
                 }
-                else 
+                else
                 {
                     PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(rngsstring(), JoinType.Solo);
                     return "Joining random room";
