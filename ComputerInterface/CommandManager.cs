@@ -63,7 +63,7 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
 
             RegisterCommand(new Command(name: "master", argumentTypes: null, args =>
             {
-                if (!NetworkSystem.Instance.InRoom)
+                if (NetworkSystem.Instance.InRoom)
                 {
                     return PhotonNetwork.IsMasterClient.ToString();
                 }
