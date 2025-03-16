@@ -6,7 +6,7 @@
     internal class PluginInfo
     {
         public const string GUID = "com.kino.gorillatag.bettercomputercommands";
-        public const string Name = "BetterComputerCommands ";
-        public const string Version = "1.0.0";
+        public const string Name = "BetterComputerCommands";
+        public const string Version = "1.0.1";
     }
 }
