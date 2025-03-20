@@ -4,6 +4,8 @@ using Zenject;
 using Photon.Pun;
 using UnityEngine;
 using System;
+using System.Text;
+using GorillaNetworking;
 
 namespace ComputerModExample //i wont explain what this stuff does i'm really bad at it theres decent documentation on how to use/create commands at: https://github.com/DecalFree/GorillaInterface
 {
@@ -24,78 +26,49 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
 
             RegisterCommand(new Command(name: "ping", argumentTypes: null, args =>
             {
-                if (PhotonNetwork.InRoom == true) //inspired by lunakittyyys easyping mod (https://github.com/lunakittyyy/EasyPing)
+                if (NetworkSystem.Instance.InRoom) //inspired by lunakittyyys easyping mod (https://github.com/lunakittyyy/EasyPing)
                 {
-                    return "Ping is: " + PhotonNetwork.GetPing() + "ms \n Your reigon: " + PhotonNetwork.CloudRegion.Replace("/*", "").ToUpper();
+                    return $"Ping is: {PhotonNetwork.GetPing()}ms \nYour region: {PhotonNetwork.CloudRegion.Replace("/*", "").ToUpper()}";
                 }
                 else
                 {
                     return "Not in a room!";
                 }
             }));
+
             RegisterCommand(new Command(name: "fps", argumentTypes: null, args => //frames per second
             {
-                if (PhotonNetwork.InRoom == true)
-                {
-                    return "FPS (for this frame) is: " + (1f / Time.deltaTime).ToString();
-                }
-                else
-                {
-                    return "FPS (for this frame) is: " + (1f / Time.deltaTime).ToString();
-                }
+                return "FPS (for this frame) is: " + (1f / Time.deltaTime);
             }));
+
             RegisterCommand(new Command(name: "playerid", argumentTypes: null, args =>
             {
-                if (PhotonNetwork.InRoom == true)
-                {
-                    return "Your PlayerID is: " + (PhotonNetwork.LocalPlayer.UserId).ToString();
-                }
-                else
-                {
-                    return "Your PlayerID is: " + (PhotonNetwork.LocalPlayer.UserId).ToString();
-                }
+                return "Your player ID is: " + NetworkSystem.Instance.LocalPlayer.UserId;
             }));
+
             RegisterCommand(new Command(name: "credit", argumentTypes: null, args =>
             {
-                if (PhotonNetwork.InRoom == true)
-                {
-                    return "Commands made by kino \nping command inspired by lunakittyyys easyping mod | github.com/lunakittyyy/EasyPing";
-                }
-                else
-                {
-                    return "Commands made by kino \nping command inspired by lunakittyyys easyping mod | github.com/lunakittyyy/EasyPing";
-                }
+                return "Commands made by kino \nping command inspired by lunakittyyys easyping mod | github.com/lunakittyyy/EasyPing";
             }));
 
             RegisterCommand(new Command(name: "time", argumentTypes: null, args =>
             {
-                if (!PhotonNetwork.InRoom == true)
-                {
-                    return "Your local date and time is" + DateTime.UtcNow.ToString();
-                }
-                else
-                {
-                    return "Your local date and time is" + DateTime.UtcNow.ToString();
-                }
+                return "Your local date and time is: " + DateTime.UtcNow;
             }));
 
             RegisterCommand(new Command(name: "appversion", argumentTypes: null, args =>
             {
-                if (!PhotonNetwork.InRoom == true)
-                {
-                    return "Current app version is:" + PhotonNetwork.AppVersion.ToString();
-                }
-                else
-                {
-                    return "Current app version is:" + PhotonNetwork.AppVersion.ToString();
-                }
+                return "Current app version is: " + GorillaComputer.instance.version;
             }));
 
             RegisterCommand(new Command(name: "master", argumentTypes: null, args =>
             {
-                if (!PhotonNetwork.InRoom == true)
+                if (NetworkSystem.Instance.InRoom)
                 {
-                    return PhotonNetwork.IsMasterClient.ToString();
+                    if (NetworkSystem.Instance.IsMasterClient)
+                        return "You're master!";
+                    else
+                        return "You aren't master!";
                 }
                 else
                 {
@@ -105,49 +78,57 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
 
             RegisterCommand(new Command(name: "players", argumentTypes: null, args =>
             {
-                if (!PhotonNetwork.InRoom == true)
-                {
-                    return "There are" + PhotonNetwork.CountOfPlayers.ToString() + "online.";
-                }
-                else
-                {
-                    return PhotonNetwork.CountOfPlayers.ToString();
-                }
+                return "There are " + NetworkSystem.Instance.GlobalPlayerCount() + " globally online.";
             }));
+
             RegisterCommand(new Command(name: "help", argumentTypes: null, args =>
             {
-                if (PhotonNetwork.InRoom == true)
-                {
-                    return "Command List: (see 'help2' for more commands)\nfps\nplayerid\nping\ntime\nplayers"; //1, 2, 3, 4, 5
-                }
-                else
-                {
-                    return "Command List: (see 'help2' for more commands)\nfps\nplayerid\nping\ntime\nplayers";
-                }
+                return "Command List: (see 'help2' for more commands)\nfps\nplayerid\nping\ntime\nplayers";
             }));
 
             RegisterCommand(new Command(name: "help2", argumentTypes: null, args =>
             {
-                if (PhotonNetwork.InRoom == true)
+                return "Command List:\nplayers\nmaster\nappversion\ntime\ncredit";
+            })); 
+
+            RegisterCommand(new Command(name: "help3", argumentTypes: null, args =>
+            {
+                return "Command List:\njoinrng";
+            })); // for help commands, 5 per help.
+
+            static string rngsstring() // creates a 5 char string
+            {
+                System.Random rng = new System.Random();
+                const string chars = "QWERTYUIOPASDFGHJKLZXCVBNM";
+                var _string = new StringBuilder(5);
+
+                for (int i = 0; i < 5; i++)
                 {
-                    return "Command List:\nplayers\nmaster\nappversion\ntime\ncredit"; // 1, 2, 3, 4, 5
+                    _string.Append(chars[rng.Next(chars.Length)]);
+                }
+
+                return _string.ToString();
+            }
+            RegisterCommand(new Command(name: "joinrng", argumentTypes: null, args =>
+            {
+                if (NetworkSystem.Instance.InRoom)
+                {
+                    PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(rngsstring(), JoinType.Solo); // joining that random string that we created
+                    return $"Leaving {NetworkSystem.Instance.CurrentRoom} and joining random room";
                 }
                 else
                 {
-                    return "Command List:\nplayers\nmaster\nappversion\ntime\ncredit";
+                    PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(rngsstring(), JoinType.Solo);
+                    return "Joining random room";
                 }
-            })); // for help commands, 5 per help.
+            }));
+
             RegisterCommand(new Command(name: "creation", argumentTypes: null, args =>
             {
-                if (PhotonNetwork.InRoom == true)
-                {
-                    return "still figuring this one out, sorry!";
-                }
-                else // sorry king defaultuser0 (efaultuber0) 
-                {
-                    return "still figuring this one out, sorry!";
-                }
+                // lol i saw that comment 
+                return "still figuring this one out, sorry!";
             })); // when i get this it will go in help3 :)
+
             void RegisterCommand(Command cmd)
             {
                 var token = _commandHandler.AddCommand(cmd);
@@ -162,7 +143,7 @@ namespace ComputerModExample //i wont explain what this stuff does i'm really ba
                 }
             }
 
-        void UnregCommands()
+            void UnregCommands()
             {
                 UnregisterAllCommands();
             }

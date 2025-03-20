@@ -16,7 +16,7 @@ namespace ComputerModExample
             // notice how I use BindInterfacesAndSelfTo
             // since MyModCommandManager inherits the IInitializable interface
             // the class gets instantiated even if no other class needs it
-            Container.BindInterfacesAndSelfTo<PingCommand>().AsSingle();
+            Container.BindInterfacesAndSelfTo<CustomCommands>().AsSingle();
         }
     }
 }
