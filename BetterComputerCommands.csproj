@@ -2,6 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFramework>netstandard2.1</TargetFramework>
+	  <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,14 +24,8 @@
     <Reference Include="BepInEx.Harmony">
       <HintPath>$(BepInExAssemblyPath)\BepInEx.Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Bepinject">
-      <HintPath>$(PluginsPath)\Bepinject-Auros\Bepinject.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-      <HintPath>$(GameAssemblyPath)\Cinemachine.dll</HintPath>
-    </Reference>
     <Reference Include="ComputerInterface">
-      <HintPath>$(PluginsPath)\ComputerInterface\ComputerInterface.dll</HintPath>
+      <HintPath>$(PluginsPath)\Main\ComputerInterface\ComputerInterface.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security">
       <HintPath>$(GameAssemblyPath)\Mono.Security.dll</HintPath>
@@ -277,12 +272,6 @@
     </Reference>
     <Reference Include="websocket-sharp">
       <HintPath>$(GameAssemblyPath)\websocket-sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Zenject">
-      <HintPath>$(PluginsPath)\Extenject\Zenject.dll</HintPath>
-    </Reference>
-    <Reference Include="Zenject-usage">
-      <HintPath>$(PluginsPath)\Extenject\Zenject-usage.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
